@@ -46,16 +46,18 @@ sub finalize {
             $set = 0 if $cookie->value eq $sid;
         }
         $c->response->cookies->{session} = { value => $sid } if $set;
-        my $finder = URI::Find->new(
-            sub {
-                my ( $uri, $orig ) = @_;
-                my $base = $c->request->base;
-                return $orig unless $orig =~ /^$base/;
-                return $orig if $uri->path =~ /\/-\//;
-                return $c->uri($orig);
-            }
-        );
-        $finder->find( \$c->res->{output} ) if $c->res->output;
+        unless ($c->config->{no_url_rewrite}) {
+          my $finder = URI::Find->new(
+              sub {
+                  my ( $uri, $orig ) = @_;
+                  my $base = $c->request->base;
+                  return $orig unless $orig =~ /^$base/;
+                  return $orig if $uri->path =~ /\/-\//;
+                  return $c->uri($orig);
+             }
+          );
+          $finder->find( \$c->res->{output} ) if $c->res->output;
+        }
     }
     return $c->NEXT::finalize(@_);
 }
@@ -145,9 +147,35 @@ sub uri {
     return $uri;
 }
 
+=head2 CONFIG OPTIONS
+
+=head3 no_url_rewrite
+
+To disable automatic storing of sessions in the url, 
+you can disable the url rewriting for session by setting 
+this to a true value.
+
+=head3 cache_root
+
+The root directory for the session cache. defaults to a
+tempdir.
+
+=head3 default_expires_in
+
+how many seconds until the session expires. defaults to 1 day
+
+=head3 auto_purge_interval
+
+How often should the system purge sessions. Defaults to 1 time
+per day.
+
+=head auto_purge_on_set
+
+Is auto purge enabled? defaults to true.
+
 =head1 SEE ALSO
 
-L<Catalyst>.
+L<Catalyst> L<Cache::FastMmap>.
 
 =head1 AUTHOR
 
