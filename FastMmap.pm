@@ -9,7 +9,7 @@ use URI;
 use URI::Find;
 use File::Temp 'tempdir';
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
 __PACKAGE__->mk_classdata('_session');
 __PACKAGE__->mk_accessors('sessionid');
@@ -169,7 +169,7 @@ how many seconds until the session expires. defaults to 1 day
 How often should the system purge sessions. Defaults to 1 time
 per day.
 
-=head auto_purge_on_set
+=head3 auto_purge_on_set
 
 Is auto purge enabled? defaults to true.
 
