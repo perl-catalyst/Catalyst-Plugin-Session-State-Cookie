@@ -37,8 +37,10 @@ Fast sessions.
 
 sub finalize {
     my $c        = shift;
-    my $redirect = $c->response->redirect;
-    $c->response->redirect( $c->uri($redirect) ) if $redirect;
+    unless ($c->config->{no_url_rewrite}) {
+        my $redirect = $c->response->redirect;
+        $c->response->redirect( $c->uri($redirect) ) if $redirect;
+    }
     if ( my $sid = $c->sessionid ) {
         $c->_session->set( $sid, $c->session );
         my $set = 1;
