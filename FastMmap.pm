@@ -55,7 +55,7 @@ sub finalize {
                 return $c->uri($orig);
             }
         );
-        $finder->find( \$c->response->{output} );
+        $finder->find( \$c->res->{output} ) if $c->res->output;
     }
     return $c->NEXT::finalize(@_);
 }
@@ -83,8 +83,10 @@ sub session {
     my $c = shift;
     return $c->{session} if $c->{session};
     my $sid = $c->sessionid;
-    if ( $sid && $c->_session && 
-         ( $c->{session} = $c->_session->get($sid) ) ) {
+    if (   $sid
+        && $c->_session
+        && ( $c->{session} = $c->_session->get($sid) ) )
+    {
         $c->log->debug(qq/Found session "$sid"/) if $c->debug;
         return $c->{session};
     }
