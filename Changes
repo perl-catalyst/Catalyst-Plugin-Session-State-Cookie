@@ -1,5 +1,8 @@
 Revision history for Perl extension Catalyst::Plugin::Session::FastMmap.
 
+0.08  Xxx Xxx 00 00:00:00 2005
+        - Fixed arguments to Cache::FastMmap.
+          IMPORTANT: The config parmeters has changed, backwards incompatible.
 0.07  Wed Mar 28 21:17:00 2005
         - Fixed urlrewrite on redirect.
 0.06  Wed Mar 09 00:48:00 2005
