@@ -9,7 +9,7 @@ use URI;
 use URI::Find;
 use File::Temp 'tempdir';
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 __PACKAGE__->mk_classdata('_session');
 __PACKAGE__->mk_accessors('sessionid');
@@ -83,7 +83,8 @@ sub session {
     my $c = shift;
     return $c->{session} if $c->{session};
     my $sid = $c->sessionid;
-    if ( $sid && ( $c->{session} = $c->_session->get($sid) ) ) {
+    if ( $sid && $c->_session && 
+         ( $c->{session} = $c->_session->get($sid) ) ) {
         $c->log->debug(qq/Found session "$sid"/) if $c->debug;
         return $c->{session};
     }
@@ -149,6 +150,7 @@ L<Catalyst>.
 =head1 AUTHOR
 
 Sebastian Riedel, C<sri@cpan.org>
+Marcus Ramberg C<mramberg@cpan.org>
 
 =head1 COPYRIGHT
 
