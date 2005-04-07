@@ -177,8 +177,8 @@ Marcus Ramberg C<mramberg@cpan.org>
 
 =head1 COPYRIGHT
 
-This program is free software, you can redistribute it and/or modify it under
-the same terms as Perl itself.
+This program is free software, you can redistribute it and/or modify it
+under the same terms as Perl itself.
 
 =cut
 
