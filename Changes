@@ -1,6 +1,9 @@
 Revision history for Perl extension Catalyst::Plugin::Session::FastMmap.
 
-0.08  Xxx Xxx 00 00:00:00 2005
+0.09  Mon Apr 18 22:00:00 2005
+        - s/output/body/ (Frank Wiegand)
+
+0.08  Sun Apr 17 00:00:00 2005
         - Cleaned docs
         - Added POD tests.
         - Fixed arguments to Cache::FastMmap.

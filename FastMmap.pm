@@ -9,7 +9,7 @@ use URI;
 use URI::Find;
 use File::Temp 'tempdir';
 
-our $VERSION = '0.07';
+our $VERSION = '0.09';
 
 __PACKAGE__->mk_classdata('_session');
 __PACKAGE__->mk_accessors('sessionid');
@@ -64,7 +64,7 @@ sub finalize {
                     return $c->uri($orig);
                 }
             );
-            $finder->find( \$c->res->{output} ) if $c->res->output;
+            $finder->find( \$c->res->{body} ) if $c->res->body;
         }
     }
     return $c->NEXT::finalize(@_);
