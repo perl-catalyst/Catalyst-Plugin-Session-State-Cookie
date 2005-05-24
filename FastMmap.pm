@@ -53,7 +53,11 @@ sub finalize {
         if ( my $cookie = $c->request->cookies->{session} ) {
             $set = 0 if $cookie->value eq $sid;
         }
-        $c->response->cookies->{session} = { value => $sid, expires => "+" . $self->config->{session}->{expires} . "s" } if $set;
+        $c->response->cookies->{session} = { 
+	    value => $sid, 
+	    expires => "+" . $self->config->{session}->{expires} . "s" 
+					   } 
+	  if $set;
         if ( $c->config->{session}->{rewrite} ) {
             my $finder = URI::Find->new(
                 sub {
