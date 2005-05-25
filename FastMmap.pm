@@ -120,7 +120,7 @@ sub session {
 sub setup {
     my $self = shift;
     $self->config->{session}->{storage} ||= '/tmp/session';
-    $self->config->{session}->{expires} ||= '1d';
+    $self->config->{session}->{expires} ||= 60 * 60 * 24;
     $self->config->{session}->{rewrite} ||= 0;
 
     $self->_session(
