@@ -1,212 +1,83 @@
-package Catalyst::Plugin::Session::FastMmap;
+package Catalyst::Plugin::Session::State::Cookie;
+use base qw/Catalyst::Plugin::Session::State/;
 
 use strict;
-use base qw/Class::Data::Inheritable Class::Accessor::Fast/;
+use warnings;
+
 use NEXT;
-use Cache::FastMmap;
-use Digest::MD5;
-use URI;
-use URI::Find;
-use File::Temp 'tempdir';
-
-our $VERSION = '0.13';
-
-__PACKAGE__->mk_classdata('_session');
-__PACKAGE__->mk_accessors('sessionid');
-
-=head1 NAME
-
-Catalyst::Plugin::Session::FastMmap - FastMmap sessions for Catalyst
-
-=head1 SYNOPSIS
-
-    use Catalyst 'Session::FastMmap';
-    
-    MyApp->config->{session} = {
-        expires => 3600,
-        rewrite => 1,
-        storage => '/tmp/session'
-    };
-
-    $c->session->{foo} = 'bar';
-    print $c->sessionid;
-
-=head1 DESCRIPTION
-
-C<Catalyst::Plugin::Session::FastMmap> is a fast session plugin for
-Catalyst that uses an mmap'ed file to act as a shared memory
-interprocess cache.  It is based on C<Cache::FastMMap>.
-
-
-=head2 EXTENDED METHODS
-
-=over 4
-
-=item finalize
-
-=cut
 
 sub finalize {
     my $c = shift;
-    if ( $c->config->{session}->{rewrite} ) {
-        my $redirect = $c->response->redirect;
-        $c->response->redirect( $c->uri($redirect) ) if $redirect;
-    }
+
     if ( my $sid = $c->sessionid ) {
-        $c->_session->set( $sid, $c->session );
-        my $set = 1;
-        if ( my $cookie = $c->request->cookies->{session} ) {
-            $set = 0 if $cookie->value eq $sid;
-        }
-        if ( $set ) {
-            $c->response->cookies->{session} = { 
-                value => $sid
-            };
-        }
-        if ( $c->config->{session}->{rewrite} ) {
-            my $finder = URI::Find->new(
-                sub {
-                    my ( $uri, $orig ) = @_;
-                    my $base = $c->request->base;
-                    return $orig unless $orig =~ /^$base/;
-                    return $orig if $uri->path =~ /\/-\//;
-                    return $c->uri($orig);
-                }
-            );
-            $finder->find( \$c->res->{body} ) if $c->res->body;
+        my $cookie = $c->request->cookies->{session};
+        if ( !$cookie or $cookie->value ne $sid ) {
+            $c->response->cookies->{session} = { value => $sid };
+            $c->log->debug(qq/A cookie with the session id "$sid" was saved/)
+              if $c->debug;
         }
     }
+
     return $c->NEXT::finalize(@_);
 }
 
-=item prepare_action
-
-=cut
-
-sub prepare_action {
+sub prepare_cookies {
     my $c = shift;
-    if ( $c->request->path =~ /^(.*)\/\-\/(.+)$/ ) {
-        $c->request->path($1);
-        $c->sessionid($2);
-        $c->log->debug(qq/Found sessionid "$2" in path/) if $c->debug;
-    }
+
     if ( my $cookie = $c->request->cookies->{session} ) {
         my $sid = $cookie->value;
         $c->sessionid($sid);
         $c->log->debug(qq/Found sessionid "$sid" in cookie/) if $c->debug;
     }
-    $c->NEXT::prepare_action(@_);
+
+    $c->NEXT::prepare_cookies(@_);
 }
 
-sub session {
-    my $c = shift;
-    return $c->{session} if $c->{session};
-    my $sid = $c->sessionid;
-    if (   $sid
-        && $c->_session
-        && ( $c->{session} = $c->_session->get($sid) ) )
-    {
-        $c->log->debug(qq/Found session "$sid"/) if $c->debug;
-        return $c->{session};
-    }
-    else {
-        my $sid = Digest::MD5::md5_hex( time, rand, $$, 'catalyst' );
-        $c->sessionid($sid);
-        $c->log->debug(qq/Created session "$sid"/) if $c->debug;
-        return $c->{session} = {};
-    }
-}
+__PACKAGE__
 
-=item setup
+__END__
 
-Sets up the session cache file.
+=pod
 
-=cut
+=head1 NAME
 
-sub setup {
-    my $self = shift;
-    $self->config->{session}->{storage} ||= '/tmp/session';
-    $self->config->{session}->{expires} ||= 60 * 60 * 24;
-    $self->config->{session}->{rewrite} ||= 0;
+Catalyst::Plugin::Session::State::Cookie - A session ID 
 
-    $self->_session(
-        Cache::FastMmap->new(
-            share_file  => $self->config->{session}->{storage},
-            expire_time => $self->config->{session}->{expires}
-        )
-    );
+=head1 SYNOPSIS
 
-    return $self->NEXT::setup(@_);
-}
+	use Catalyst qw/Session Session::State::Cookie Session::Store::Foo/;
 
-=back
+=head1 DESCRIPTION
 
-=head2 METHODS
+In order for L<Catalyst::Plugin::Session> to work the session ID needs to be
+stored on the client, and the session data needs to be stored on the server.
+
+This plugin stores the session ID on the client using the cookie mechanism.
+
+=head1 EXTENDED METHODS
 
 =over 4
 
-=item session
+=item prepare_cookies
 
-=item uri
+Will restore if an appropriate cookie is found.
 
-Extends an uri with session id if needed.
+=item finalize
 
-    my $uri = $c->uri('http://localhost/foo');
-
-=cut
-
-sub uri {
-    my ( $c, $uri ) = @_;
-    if ( my $sid = $c->sessionid ) {
-        $uri = URI->new($uri);
-        my $path = $uri->path;
-        $path .= '/' unless $path =~ /\/$/;
-        $uri->path( $path . "-/$sid" );
-        return $uri->as_string;
-    }
-    return $uri;
-}
-
-=back
-
-=head2 CONFIG OPTIONS
-
-=over 4
-
-=item rewrite
-
-If set to a true value sessions are automatically stored in the url;
-defaults to false.
-
-=item storage
-
-Specifies the file to be used for the sharing of session data;
-defaults to C</tmp/session>. 
-
-Note that the file will be created with mode 0640, which means that it
-will only be writeable by processes running with the same uid as the
-process that creates the file.  If this may be a problem, for example
-if you may try to debug the program as one user and run it as another,
-specify a filename like C<< /tmp/session-$> >>, which includes the
-UID of the process in the filename.
-
-
-=item expires
-
-Specifies the session expiry time in seconds; defaults to 86,400,
-i.e. one day.
+Will set a cookie called C<session> if it doesn't exist or if it's value is not the current session id.
 
 =back
 
 =head1 SEE ALSO
 
-L<Catalyst>, L<Cache::FastMmap>.
+L<Catalyst>, L<Catalyst::Plugin::Session>.
 
 =head1 AUTHOR
 
 Sebastian Riedel E<lt>C<sri@cpan.org>E<gt>,
 Marcus Ramberg E<lt>C<mramberg@cpan.org>E<gt>,
-Andrew Ford E<lt>C<andrewf@cpan.org>E<gt>
+Andrew Ford E<lt>C<andrewf@cpan.org>E<gt>,
+Yuval Kogman E<lt>C<nothingmuch@woobling.org>E<gt>
 
 =head1 COPYRIGHT
 
