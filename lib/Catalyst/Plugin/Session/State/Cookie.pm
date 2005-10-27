@@ -6,13 +6,23 @@ use warnings;
 
 use NEXT;
 
+sub setup_session {
+	my $c = shift;
+
+	$c->NEXT::setup_session(@_);
+
+	$c->config->{session}{cookie_name} ||= "session";
+}
+
 sub finalize {
     my $c = shift;
 
+	my $cookie_name = $c->config->{session}{cookie_name};
+
     if ( my $sid = $c->sessionid ) {
-        my $cookie = $c->request->cookies->{session};
+        my $cookie = $c->request->cookies->{$cookie_name};
         if ( !$cookie or $cookie->value ne $sid ) {
-            $c->response->cookies->{session} = { value => $sid };
+            $c->response->cookies->{$cookie_name} = { value => $sid };
             $c->log->debug(qq/A cookie with the session id "$sid" was saved/)
               if $c->debug;
         }
@@ -24,7 +34,9 @@ sub finalize {
 sub prepare_cookies {
     my $c = shift;
 
-    if ( my $cookie = $c->request->cookies->{session} ) {
+	my $cookie_name = $c->config->{session}{cookie_name};
+
+    if ( my $cookie = $c->request->cookies->{$cookie_name} ) {
         my $sid = $cookie->value;
         $c->sessionid($sid);
         $c->log->debug(qq/Found sessionid "$sid" in cookie/) if $c->debug;
@@ -65,6 +77,16 @@ Will restore if an appropriate cookie is found.
 =item finalize
 
 Will set a cookie called C<session> if it doesn't exist or if it's value is not the current session id.
+
+=back
+
+=head1 CONFIGURATION
+
+=over 4
+
+=item cookie_name
+
+The name of the cookie to store (defaults to C<session>).
 
 =back
 
