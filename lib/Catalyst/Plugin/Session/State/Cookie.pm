@@ -6,6 +6,8 @@ use warnings;
 
 use NEXT;
 
+our $VERSION = "0.01";
+
 sub setup_session {
 	my $c = shift;
 
