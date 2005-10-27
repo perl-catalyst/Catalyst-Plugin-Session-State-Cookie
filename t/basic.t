@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 13;
+use Test::More tests => 15;
 use Test::MockObject;
 use Test::MockObject::Extends;
 
@@ -24,11 +24,20 @@ $res->set_always( cookies => \%res_cookies );
 my $cxt =
   Test::MockObject::Extends->new("Catalyst::Plugin::Session::State::Cookie");
 
+$cxt->set_always( config => { } );
 $cxt->set_always( request  => $req );
 $cxt->set_always( response => $res );
 $cxt->set_false("debug");
 my $sessionid;
 $cxt->mock( sessionid => sub { shift; $sessionid = shift if @_; $sessionid } );
+
+
+can_ok( $m, "setup_session" );
+
+$cxt->setup_session;
+
+is( $cxt->config->{session}{cookie_name}, "session", "default cookie name is set" );
+
 
 can_ok( $m, "prepare_cookies" );
 
