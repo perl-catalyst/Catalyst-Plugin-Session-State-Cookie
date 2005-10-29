@@ -7,7 +7,6 @@ my $build = Module::Build->new(
     module_name        => 'Catalyst::Plugin::Session::State::Cookie',
     requires           => {
         'perl'                      => '5.8.1',
-        'Catalyst'                  => 0,
         'Catalyst::Plugin::Session' => 0.01,
     },
     create_readme      => 1,
