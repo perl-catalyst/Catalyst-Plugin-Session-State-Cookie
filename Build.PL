@@ -9,8 +9,8 @@ my $build = Module::Build->new(
         'perl'                      => '5.8.1',
         'Catalyst::Plugin::Session' => 0.01,
     },
-    create_readme      => 1,
-	sign => 1,
+    create_readme => 1,
+    sign          => 1,
 );
 $build->create_build_script;
 

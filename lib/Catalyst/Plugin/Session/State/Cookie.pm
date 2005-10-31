@@ -9,17 +9,17 @@ use NEXT;
 our $VERSION = "0.01";
 
 sub setup_session {
-	my $c = shift;
+    my $c = shift;
 
-	$c->NEXT::setup_session(@_);
+    $c->NEXT::setup_session(@_);
 
-	$c->config->{session}{cookie_name} ||= "session";
+    $c->config->{session}{cookie_name} ||= "session";
 }
 
 sub finalize {
     my $c = shift;
 
-	my $cookie_name = $c->config->{session}{cookie_name};
+    my $cookie_name = $c->config->{session}{cookie_name};
 
     if ( my $sid = $c->sessionid ) {
         my $cookie = $c->request->cookies->{$cookie_name};
@@ -38,7 +38,7 @@ sub prepare_cookies {
 
     my $ret = $c->NEXT::prepare_cookies(@_);
 
-	my $cookie_name = $c->config->{session}{cookie_name};
+    my $cookie_name = $c->config->{session}{cookie_name};
 
     if ( my $cookie = $c->request->cookies->{$cookie_name} ) {
         my $sid = $cookie->value;
@@ -46,7 +46,7 @@ sub prepare_cookies {
         $c->log->debug(qq/Found sessionid "$sid" in cookie/) if $c->debug;
     }
 
-	return $ret;
+    return $ret;
 }
 
 __PACKAGE__
@@ -61,7 +61,7 @@ Catalyst::Plugin::Session::State::Cookie - A session ID
 
 =head1 SYNOPSIS
 
-	use Catalyst qw/Session Session::State::Cookie Session::Store::Foo/;
+    use Catalyst qw/Session Session::State::Cookie Session::Store::Foo/;
 
 =head1 DESCRIPTION
 
