@@ -36,6 +36,8 @@ sub finalize {
 sub prepare_cookies {
     my $c = shift;
 
+    my $ret = $c->NEXT::prepare_cookies(@_);
+
 	my $cookie_name = $c->config->{session}{cookie_name};
 
     if ( my $cookie = $c->request->cookies->{$cookie_name} ) {
@@ -44,7 +46,7 @@ sub prepare_cookies {
         $c->log->debug(qq/Found sessionid "$sid" in cookie/) if $c->debug;
     }
 
-    $c->NEXT::prepare_cookies(@_);
+	return $ret;
 }
 
 __PACKAGE__
