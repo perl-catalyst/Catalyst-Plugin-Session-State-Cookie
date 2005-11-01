@@ -6,8 +6,8 @@ my $build = Module::Build->new(
     license            => 'perl',
     module_name        => 'Catalyst::Plugin::Session::State::Cookie',
     requires           => {
-        'perl'                      => '5.8.1',
-        'Catalyst::Plugin::Session' => 0.01,
+        'Catalyst::Plugin::Session' => '0.01',
+        'Test::MockObject'          => '1.01',
     },
     create_readme => 1,
     sign          => 1,
