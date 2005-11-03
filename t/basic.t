@@ -24,20 +24,20 @@ $res->set_always( cookies => \%res_cookies );
 my $cxt =
   Test::MockObject::Extends->new("Catalyst::Plugin::Session::State::Cookie");
 
-$cxt->set_always( config => { } );
+$cxt->set_always( config   => {} );
 $cxt->set_always( request  => $req );
 $cxt->set_always( response => $res );
+$cxt->set_always( session  => { __expires => 123 } );
 $cxt->set_false("debug");
 my $sessionid;
 $cxt->mock( sessionid => sub { shift; $sessionid = shift if @_; $sessionid } );
-
 
 can_ok( $m, "setup_session" );
 
 $cxt->setup_session;
 
-is( $cxt->config->{session}{cookie_name}, "session", "default cookie name is set" );
-
+is( $cxt->config->{session}{cookie_name},
+    "session", "default cookie name is set" );
 
 can_ok( $m, "prepare_cookies" );
 
@@ -78,7 +78,7 @@ $cxt->finalize;
 $res->called_ok( "cookies", "response cookie was set when sessionid changed" );
 is_deeply(
     \%res_cookies,
-    { session => { value => $sessionid } },
+    { session => { value => $sessionid, expires => 123 } },
     "cookie was set correctly"
 );
 
@@ -104,7 +104,7 @@ $res->called_ok( "cookies",
     "response cookie was set when session was created" );
 is_deeply(
     \%res_cookies,
-    { session => { value => $sessionid } },
+    { session => { value => $sessionid, expires => 123 } },
     "cookie was set correctly"
 );
 
