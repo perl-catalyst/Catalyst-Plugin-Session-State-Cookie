@@ -25,9 +25,9 @@ sub finalize {
         my $cookie = $c->request->cookies->{$cookie_name};
         if ( !$cookie or $cookie->value ne $sid ) {
             $c->response->cookies->{$cookie_name} = {
-				value => $sid,
-				expires => $c->session->{__expires}
-			};
+                value   => $sid,
+                expires => $c->session->{__expires},
+            };
             $c->log->debug(qq/A cookie with the session id "$sid" was saved/)
               if $c->debug;
         }
