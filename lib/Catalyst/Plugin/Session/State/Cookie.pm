@@ -28,6 +28,10 @@ sub finalize {
                 value   => $sid,
                 expires => $c->session->{__expires},
             };
+            if ( $c->config->{session}{cookie_domain} ) {
+                $c->response->cookies->{$cookie_name}->{domain} =
+                  $c->config->{session}{cookie_domain};
+            }
             $c->log->debug(qq/A cookie with the session id "$sid" was saved/)
               if $c->debug;
         }
@@ -99,6 +103,10 @@ Will set the C<cookie_name> parameter to it's default value if it isn't set.
 =item cookie_name
 
 The name of the cookie to store (defaults to C<session>).
+
+=item cookie_domain
+
+The name of the domain to store in the cookie (defaults to current host)
 
 =back
 
