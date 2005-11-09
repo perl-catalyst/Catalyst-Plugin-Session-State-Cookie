@@ -28,9 +28,8 @@ sub finalize {
                 value   => $sid,
                 expires => $c->session->{__expires},
             };
-            if ( $c->config->{session}{cookie_domain} ) {
-                $c->response->cookies->{$cookie_name}->{domain} =
-                  $c->config->{session}{cookie_domain};
+            if ( my $domain = $c->config->{session}{cookie_domain} ) {
+                $c->response->cookies->{$cookie_name}->{domain} = $domain;
             }
             $c->log->debug(qq/A cookie with the session id "$sid" was saved/)
               if $c->debug;
