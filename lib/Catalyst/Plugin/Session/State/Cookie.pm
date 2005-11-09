@@ -16,7 +16,7 @@ sub setup_session {
     $c->config->{session}{cookie_name} ||= "session";
 }
 
-sub finalize {
+sub finalize_cookies {
     my $c = shift;
 
     my $cookie_name = $c->config->{session}{cookie_name};
@@ -36,7 +36,7 @@ sub finalize {
         }
     }
 
-    return $c->NEXT::finalize(@_);
+    return $c->NEXT::finalize_cookies(@_);
 }
 
 sub prepare_cookies {
@@ -84,7 +84,7 @@ This plugin stores the session ID on the client using the cookie mechanism.
 
 Will restore if an appropriate cookie is found.
 
-=item finalize
+=item finalize_cookies
 
 Will set a cookie called C<session> if it doesn't exist or if it's value is not
 the current session id.

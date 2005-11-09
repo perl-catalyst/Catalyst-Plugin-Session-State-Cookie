@@ -56,8 +56,8 @@ is( $cxt->sessionid, "the session id", "session ID was restored from cookie" );
 $cxt->clear;
 $res->clear;
 
-can_ok( $m, "finalize" );
-$cxt->finalize;
+can_ok( $m, "finalize_cookies" );
+$cxt->finalize_cookies;
 ok( !$res->called("cookies"),
     "response cookie was not set since res cookie is already there" );
 
@@ -65,7 +65,7 @@ $cxt->clear;
 $sessionid = undef;
 $res->clear;
 
-$cxt->finalize;
+$cxt->finalize_cookies;
 ok( !$res->called("cookies"),
 "response cookie was not set when sessionid was deleted, even if req cookie is still there"
 );
@@ -74,7 +74,7 @@ $sessionid = "some other ID";
 $cxt->clear;
 $res->clear;
 
-$cxt->finalize;
+$cxt->finalize_cookies;
 $res->called_ok( "cookies", "response cookie was set when sessionid changed" );
 is_deeply(
     \%res_cookies,
@@ -88,7 +88,7 @@ $res->clear;
 %res_cookies = ();
 $sessionid   = undef;
 
-$cxt->finalize;
+$cxt->finalize_cookies;
 ok( !$res->called("cookies"),
     "response cookie was not set when there is no sessionid or request cookie"
 );
@@ -98,7 +98,7 @@ $sessionid   = "123";
 %res_cookies = ();
 $res->clear;
 
-$cxt->finalize;
+$cxt->finalize_cookies;
 
 $res->called_ok( "cookies",
     "response cookie was set when session was created" );
