@@ -19,24 +19,37 @@ sub setup_session {
 sub finalize_cookies {
     my $c = shift;
 
-    my $cookie_name = $c->config->{session}{cookie_name};
-
-    if ( my $sid = $c->sessionid ) {
-        my $cookie = $c->request->cookies->{$cookie_name};
-        if ( !$cookie or $cookie->value ne $sid ) {
-            $c->response->cookies->{$cookie_name} = {
-                value   => $sid,
-                expires => $c->session->{__expires},
-            };
-            if ( my $domain = $c->config->{session}{cookie_domain} ) {
-                $c->response->cookies->{$cookie_name}->{domain} = $domain;
-            }
-            $c->log->debug(qq/A cookie with the session id "$sid" was saved/)
-              if $c->debug;
-        }
-    }
+    if ( $c->sessionid) {
+		$c->update_session_cookie( $c->make_session_cookie );
+	}
 
     return $c->NEXT::finalize_cookies(@_);
+}
+
+sub update_session_cookie {
+	my ( $c, $updated ) = @_;
+    my $cookie_name = $c->config->{session}{cookie_name};
+	$c->response->cookies->{$cookie_name} = $updated;
+}
+
+sub make_session_cookie {
+	my $c = shift;
+
+	my $cfg = $c->config->{session};
+	my $cookie = {
+		value   => $c->sessionid,
+		($cfg->{cookie_domain} ? (domain => $cfg->{cookie_domain}) : ()),
+	};
+
+	if ( exists $cfg->{cookie_expires} ) {
+		if ( my $ttl = $cfg->{cookie_expires} ) {
+			$cookie->{expires} = time() + $ttl;
+		} # else { cookie is non-persistent }
+	} else {
+		$cookie->{expires} = $c->session->{__expires};
+	}
+
+	return $cookie;
 }
 
 sub prepare_cookies {
@@ -108,6 +121,20 @@ The name of the cookie to store (defaults to C<session>).
 The name of the domain to store in the cookie (defaults to current host)
 
 =back
+
+=item CAVEATS
+
+Sessions have to be created before the first write to be saved. For example:
+
+	sub action : Local {
+		my ( $self, $c ) = @_;
+		$c->res->write("foo");
+		$c->session( ... );
+		...
+	}
+
+Will cause a session ID to not be set, because by the time a session is
+actually created the headers have already been sent to the client.
 
 =head1 SEE ALSO
 
