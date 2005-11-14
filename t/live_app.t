@@ -29,9 +29,9 @@ BEGIN {
 
     sub stream : Local {
         my ( $self, $c ) = @_;
-		my $count = ++$c->session->{counter};
+        my $count = ++$c->session->{counter};
         $c->res->write("hit number ");
-        $c->res->write( $count );
+        $c->res->write($count);
     }
 
     __PACKAGE__->setup;
@@ -41,24 +41,24 @@ use Test::WWW::Mechanize::Catalyst qw/CookieTestApp/;
 
 my $m = Test::WWW::Mechanize::Catalyst->new;
 
-$m->get_ok("http://foo.com/stream", "get page");
-$m->content_contains("hit number 1", "session data created");
+$m->get_ok( "http://foo.com/stream", "get page" );
+$m->content_contains( "hit number 1", "session data created" );
 
 my $expired;
-$m->cookie_jar->scan(sub { $expired = $_[8] });
+$m->cookie_jar->scan( sub { $expired = $_[8] } );
 
-$m->get_ok("http://foo.com/page", "get page");
-$m->content_contains("hit number 2", "session data restored");
+$m->get_ok( "http://foo.com/page", "get page" );
+$m->content_contains( "hit number 2", "session data restored" );
 
-$m->get_ok("http://foo.com/stream", "get stream");
-$m->content_contains("hit number 3", "session data restored");
+$m->get_ok( "http://foo.com/stream", "get stream" );
+$m->content_contains( "hit number 3", "session data restored" );
 
 sleep 1;
 
-$m->get_ok("http://foo.com/page", "get stream");
-$m->content_contains("hit number 4", "session data restored");
+$m->get_ok( "http://foo.com/page", "get stream" );
+$m->content_contains( "hit number 4", "session data restored" );
 
 my $updated_expired;
-$m->cookie_jar->scan(sub { $updated_expired = $_[8] });
+$m->cookie_jar->scan( sub { $updated_expired = $_[8] } );
 
-cmp_ok( $expired, "<", $updated_expired, "cookie expiration was extended"); 
+cmp_ok( $expired, "<", $updated_expired, "cookie expiration was extended" );

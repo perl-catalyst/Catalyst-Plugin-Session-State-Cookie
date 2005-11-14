@@ -19,37 +19,38 @@ sub setup_session {
 sub finalize_cookies {
     my $c = shift;
 
-    if ( $c->sessionid) {
-		$c->update_session_cookie( $c->make_session_cookie );
-	}
+    if ( $c->sessionid ) {
+        $c->update_session_cookie( $c->make_session_cookie );
+    }
 
     return $c->NEXT::finalize_cookies(@_);
 }
 
 sub update_session_cookie {
-	my ( $c, $updated ) = @_;
+    my ( $c, $updated ) = @_;
     my $cookie_name = $c->config->{session}{cookie_name};
-	$c->response->cookies->{$cookie_name} = $updated;
+    $c->response->cookies->{$cookie_name} = $updated;
 }
 
 sub make_session_cookie {
-	my $c = shift;
+    my $c = shift;
 
-	my $cfg = $c->config->{session};
-	my $cookie = {
-		value   => $c->sessionid,
-		($cfg->{cookie_domain} ? (domain => $cfg->{cookie_domain}) : ()),
-	};
+    my $cfg    = $c->config->{session};
+    my $cookie = {
+        value => $c->sessionid,
+        ( $cfg->{cookie_domain} ? ( domain => $cfg->{cookie_domain} ) : () ),
+    };
 
-	if ( exists $cfg->{cookie_expires} ) {
-		if ( my $ttl = $cfg->{cookie_expires} ) {
-			$cookie->{expires} = time() + $ttl;
-		} # else { cookie is non-persistent }
-	} else {
-		$cookie->{expires} = $c->session->{__expires};
-	}
+    if ( exists $cfg->{cookie_expires} ) {
+        if ( my $ttl = $cfg->{cookie_expires} ) {
+            $cookie->{expires} = time() + $ttl;
+        }    # else { cookie is non-persistent }
+    }
+    else {
+        $cookie->{expires} = $c->session->{__expires};
+    }
 
-	return $cookie;
+    return $cookie;
 }
 
 sub prepare_cookies {

@@ -58,9 +58,11 @@ $res->clear;
 
 can_ok( $m, "finalize_cookies" );
 $cxt->finalize_cookies;
-{ local $TODO = "This check is a pain to write, should be done by catalyst itself";
-ok( !$res->called("cookies"),
-    "response cookie was not set since res cookie is already there" );
+{
+    local $TODO =
+      "This check is a pain to write, should be done by catalyst itself";
+    ok( !$res->called("cookies"),
+        "response cookie was not set since res cookie is already there" );
 }
 
 $cxt->clear;
