@@ -89,6 +89,20 @@ stored on the client, and the session data needs to be stored on the server.
 
 This plugin stores the session ID on the client using the cookie mechanism.
 
+=head1 METHODS
+
+=over 4
+
+=item make_session_cookie
+
+Returns a hash reference with the default values for new cookies.
+
+=item update_session_cookie $hash_ref
+
+Sets the cookie based on C<cookie_name> in the response object.
+
+=back
+
 =head1 EXTENDED METHODS
 
 =over 4
@@ -122,7 +136,7 @@ The name of the domain to store in the cookie (defaults to current host)
 
 =back
 
-=item CAVEATS
+=head1 CAVEATS
 
 Sessions have to be created before the first write to be saved. For example:
 
