@@ -155,12 +155,17 @@ actually created the headers have already been sent to the client.
 
 L<Catalyst>, L<Catalyst::Plugin::Session>.
 
-=head1 AUTHOR
+=head1 AUTHORS
 
-Sebastian Riedel E<lt>C<sri@cpan.org>E<gt>,
-Marcus Ramberg E<lt>C<mramberg@cpan.org>E<gt>,
-Andrew Ford E<lt>C<andrewf@cpan.org>E<gt>,
-Yuval Kogman E<lt>C<nothingmuch@woobling.org>E<gt>
+This module is derived from L<Catalyst::Plugin::Session::FastMmap> code, and
+has been heavily modified since.
+
+Andrew Ford
+Andy Grundman
+Christian Hansen
+Yuval Kogman, C<nothingmuch@woobling.org>
+Marcus Ramberg
+Sebastian Riedel
 
 =head1 COPYRIGHT
 
