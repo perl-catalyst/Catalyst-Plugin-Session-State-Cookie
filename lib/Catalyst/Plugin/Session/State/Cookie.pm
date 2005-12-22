@@ -12,7 +12,7 @@ sub setup_session {
     my $c = shift;
 
     $c->NEXT::setup_session(@_);
-    $c->config->{session}{cookie_name} ||= Catalyst::Utils::appprefix( $c );
+    $c->config->{session}{cookie_name} ||= Catalyst::Utils::appprefix( $c ) . '_session';
 }
 
 sub finalize_cookies {
@@ -128,7 +128,7 @@ Will set the C<cookie_name> parameter to it's default value if it isn't set.
 
 =item cookie_name
 
-The name of the cookie to store (defaults to C<Catalyst::Utils::apprefix($c)>).
+The name of the cookie to store (defaults to C<Catalyst::Utils::apprefix($c) . '_session'>).
 
 =item cookie_domain
 
