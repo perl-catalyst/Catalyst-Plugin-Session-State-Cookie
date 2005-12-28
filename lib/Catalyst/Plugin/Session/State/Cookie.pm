@@ -12,7 +12,8 @@ sub setup_session {
     my $c = shift;
 
     $c->NEXT::setup_session(@_);
-    $c->config->{session}{cookie_name} ||= Catalyst::Utils::appprefix( $c ) . '_session';
+    $c->config->{session}{cookie_name}
+        ||= Catalyst::Utils::appprefix($c) . '_session';
 }
 
 sub finalize_cookies {
@@ -41,11 +42,15 @@ sub make_session_cookie {
     };
 
     if ( exists $cfg->{cookie_expires} ) {
-        if ( my $ttl = $cfg->{cookie_expires} ) {
-            $cookie->{expires} = time() + $ttl;
-        }    # else { cookie is non-persistent }
+        if ( $cfg->{cookie_expires} > 0 ) {
+            $cookie->{expires} = time() + $cfg->{cookie_expires};
+        }
+        else {
+            $cookie->{expires} = undef;
+        }
     }
     else {
+        # XXX: FIXME, Session dropped __expires
         $cookie->{expires} = $c->session->{__expires};
     }
 
@@ -133,6 +138,12 @@ The name of the cookie to store (defaults to C<Catalyst::Utils::apprefix($c) . '
 =item cookie_domain
 
 The name of the domain to store in the cookie (defaults to current host)
+
+=item cookie_expires
+
+Number of seconds from now you want to elapse before cookie will expire. 
+Set to 0 to create a session cookie, ie one which will die when the 
+user's browser is shut down.
 
 =back
 

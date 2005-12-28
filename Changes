@@ -1,0 +1,7 @@
+Revision history for Perl extension Catalyst::Plugin::Session::State::Cookie
+
+0.02 
+        - Fixed cookie_expires to support browser session cookies.
+
+0.01    2005-11-14 12:45:00
+        - Initial release.
