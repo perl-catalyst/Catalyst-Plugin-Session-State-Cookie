@@ -1,6 +1,6 @@
 Revision history for Perl extension Catalyst::Plugin::Session::State::Cookie
 
-0.02 
+0.02    2005-12-28 13:51:00
         - Fixed cookie_expires to support browser session cookies.
         - Renamed default cookie name from just 'session' to
           'yourapp_session' to allow several applications on the same domain
