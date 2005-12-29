@@ -5,6 +5,7 @@ use strict;
 use warnings;
 
 use NEXT;
+use Catalyst::Utils ();
 
 our $VERSION = "0.02";
 
@@ -50,8 +51,7 @@ sub make_session_cookie {
         }
     }
     else {
-        # XXX: FIXME, Session dropped __expires
-        $cookie->{expires} = $c->session->{__expires};
+        $cookie->{expires} = $c->session_expires;
     }
 
     return $cookie;

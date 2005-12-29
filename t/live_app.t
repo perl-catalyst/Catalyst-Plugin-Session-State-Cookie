@@ -53,7 +53,7 @@ $m->content_contains( "hit number 2", "session data restored" );
 $m->get_ok( "http://foo.com/stream", "get stream" );
 $m->content_contains( "hit number 3", "session data restored" );
 
-sleep 1;
+sleep 2;
 
 $m->get_ok( "http://foo.com/page", "get stream" );
 $m->content_contains( "hit number 4", "session data restored" );

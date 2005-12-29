@@ -27,7 +27,8 @@ my $cxt =
 $cxt->set_always( config   => {} );
 $cxt->set_always( request  => $req );
 $cxt->set_always( response => $res );
-$cxt->set_always( session  => { __expires => 123 } );
+$cxt->set_always( session  => { } );
+$cxt->set_always( session_expires => 123 );
 $cxt->set_false("debug");
 my $sessionid;
 $cxt->mock( sessionid => sub { shift; $sessionid = shift if @_; $sessionid } );
@@ -36,8 +37,10 @@ can_ok( $m, "setup_session" );
 
 $cxt->setup_session;
 
-is( $cxt->config->{session}{cookie_name},
-    "session", "default cookie name is set" );
+like( $cxt->config->{session}{cookie_name},
+    qr/_session$/, "default cookie name is set" );
+
+$cxt->config->{session}{cookie_name} = "session";
 
 can_ok( $m, "prepare_cookies" );
 
