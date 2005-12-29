@@ -81,7 +81,7 @@ __END__
 
 =head1 NAME
 
-Catalyst::Plugin::Session::State::Cookie - A session ID 
+Catalyst::Plugin::Session::State::Cookie - Maintain session IDs using cookies.
 
 =head1 SYNOPSIS
 
