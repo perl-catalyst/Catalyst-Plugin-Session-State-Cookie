@@ -42,19 +42,27 @@ sub make_session_cookie {
         ( $cfg->{cookie_domain} ? ( domain => $cfg->{cookie_domain} ) : () ),
     };
 
+    $cookie->{expires}=$c->calc_expiry();
+
+    return $cookie;
+}
+
+sub calc_expiry {
+    my $c=shift;
+    my $cfg    = $c->config->{session};
+    my $value= $c->NEXT::calc_expiry(@_);
+    return $value if $value;
     if ( exists $cfg->{cookie_expires} ) {
         if ( $cfg->{cookie_expires} > 0 ) {
-            $cookie->{expires} = time() + $cfg->{cookie_expires};
+            return time() + $cfg->{cookie_expires};
         }
         else {
-            $cookie->{expires} = undef;
+            return undef;
         }
     }
     else {
-        $cookie->{expires} = $c->session_expires;
+       return $c->session_expires;
     }
-
-    return $cookie;
 }
 
 sub prepare_cookies {
