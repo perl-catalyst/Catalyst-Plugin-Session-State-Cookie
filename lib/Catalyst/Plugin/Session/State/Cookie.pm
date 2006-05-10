@@ -44,6 +44,8 @@ sub make_session_cookie {
 
     $cookie->{expires}=$c->calc_expiry();
 
+    $cookie->{secure} = 1 if $cfg->{cookie_secure};
+
     return $cookie;
 }
 
@@ -152,6 +154,10 @@ The name of the domain to store in the cookie (defaults to current host)
 Number of seconds from now you want to elapse before cookie will expire. 
 Set to 0 to create a session cookie, ie one which will die when the 
 user's browser is shut down.
+
+=item cookie_secure
+
+If this attribute set true, the cookie will only be sent via HTTPS.
 
 =back
 
