@@ -13,6 +13,7 @@ sub setup_session {
     my $c = shift;
 
     $c->NEXT::setup_session(@_);
+
     $c->config->{session}{cookie_name}
         ||= Catalyst::Utils::appprefix($c) . '_session';
 }
@@ -20,11 +21,19 @@ sub setup_session {
 sub finalize_cookies {
     my $c = shift;
 
-    if ( $c->sessionid ) {
-        $c->update_session_cookie( $c->make_session_cookie );
+    if ( my $cookie = $c->get_session_cookie ) {
+        $c->update_session_cookie( $c->make_session_cookie( $cookie->value ) );
     }
 
-    return $c->NEXT::finalize_cookies(@_);
+    $c->NEXT::finalize_cookies( @_ );
+}
+
+sub set_session_id {
+    my ( $c, $sid ) = @_;
+
+    $c->update_session_cookie( $c->make_session_cookie( $sid ) );
+
+    return $c->NEXT::set_session_id(@_);
 }
 
 sub update_session_cookie {
@@ -34,26 +43,36 @@ sub update_session_cookie {
 }
 
 sub make_session_cookie {
-    my $c = shift;
+    my ( $c, $sid, %attrs ) = @_;
 
     my $cfg    = $c->config->{session};
     my $cookie = {
-        value => $c->sessionid,
+        value => $sid,
+        %attrs,
         ( $cfg->{cookie_domain} ? ( domain => $cfg->{cookie_domain} ) : () ),
     };
 
-    $cookie->{expires}=$c->calc_expiry();
+    unless ( exists $cookie->{expires} ) {
+        $cookie->{expires} = $c->calculate_session_cookie_expires();
+    }
 
     $cookie->{secure} = 1 if $cfg->{cookie_secure};
 
     return $cookie;
 }
 
-sub calc_expiry {
-    my $c=shift;
-    my $cfg    = $c->config->{session};
-    my $value= $c->NEXT::calc_expiry(@_);
+sub calc_expiry { # compat
+    my $c = shift;
+    $c->NEXT::calc_expiry( @_ ) || $c->calculate_session_cookie_expires( @_ );
+}
+
+sub calculate_session_cookie_expires {
+    my $c   = shift;
+    my $cfg = $c->config->{session};
+
+    my $value = $c->NEXT::calculate_session_cookie_expires(@_);
     return $value if $value;
+
     if ( exists $cfg->{cookie_expires} ) {
         if ( $cfg->{cookie_expires} > 0 ) {
             return time() + $cfg->{cookie_expires};
@@ -63,24 +82,34 @@ sub calc_expiry {
         }
     }
     else {
-       return $c->session_expires;
+        return $c->session_expires;
     }
 }
 
-sub prepare_cookies {
+sub get_session_cookie {
     my $c = shift;
-
-    my $ret = $c->NEXT::prepare_cookies(@_);
 
     my $cookie_name = $c->config->{session}{cookie_name};
 
-    if ( my $cookie = $c->request->cookies->{$cookie_name} ) {
+    return $c->request->cookies->{$cookie_name};
+}
+
+sub get_session_id {
+    my $c = shift;
+
+    if ( my $cookie = $c->get_session_cookie  ) { 
         my $sid = $cookie->value;
-        $c->sessionid($sid);
         $c->log->debug(qq/Found sessionid "$sid" in cookie/) if $c->debug;
+        return $sid if $sid;
     }
 
-    return $ret;
+    $c->NEXT::get_session_id(@_);
+}
+
+sub delete_session_id {
+    my $c = shift;
+    $c->NEXT::delete_session_id();
+    delete $c->response->cookies->{ $c->config->{session}{cookie_name} };
 }
 
 __PACKAGE__
