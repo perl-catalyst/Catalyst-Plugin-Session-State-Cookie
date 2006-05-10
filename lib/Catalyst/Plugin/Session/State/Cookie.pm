@@ -18,14 +18,14 @@ sub setup_session {
         ||= Catalyst::Utils::appprefix($c) . '_session';
 }
 
-sub finalize_cookies {
-    my $c = shift;
+sub extend_session_id {
+    my ( $c, $sid, $expires ) = @_;
 
     if ( my $cookie = $c->get_session_cookie ) {
-        $c->update_session_cookie( $c->make_session_cookie( $cookie->value ) );
+        $c->update_session_cookie( $c->make_session_cookie( $sid ) );
     }
 
-    $c->NEXT::finalize_cookies( @_ );
+    $c->NEXT::extend_session_id( @_ );
 }
 
 sub set_session_id {
