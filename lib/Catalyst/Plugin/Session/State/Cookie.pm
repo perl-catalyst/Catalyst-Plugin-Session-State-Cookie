@@ -48,8 +48,8 @@ sub make_session_cookie {
     my $cfg    = $c->config->{session};
     my $cookie = {
         value => $sid,
-        %attrs,
         ( $cfg->{cookie_domain} ? ( domain => $cfg->{cookie_domain} ) : () ),
+        %attrs,
     };
 
     unless ( exists $cookie->{expires} ) {
@@ -107,9 +107,11 @@ sub get_session_id {
 }
 
 sub delete_session_id {
-    my $c = shift;
-    $c->NEXT::delete_session_id();
-    delete $c->response->cookies->{ $c->config->{session}{cookie_name} };
+    my ( $c, $sid ) = @_;
+
+    $c->update_session_cookie( $c->make_session_cookie( $sid, expires => 0 ) );
+
+    $c->NEXT::delete_session_id($sid);
 }
 
 __PACKAGE__
