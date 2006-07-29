@@ -1,7 +1,9 @@
 Revision history for Perl extension Catalyst::Plugin::Session::State::Cookie
 
-	- refactored make_session_cookie to separate calc_expiry, and made
-	  that easily overloadable.
+0.03 
+        - refactored make_session_cookie to separate calc_expiry, and made
+	      that easily overloadable.
+        - updated for the new state API (get_session_id, set_session_id, etc)
 
 0.02    2005-12-28 13:51:00
         - Fixed cookie_expires to support browser session cookies.
