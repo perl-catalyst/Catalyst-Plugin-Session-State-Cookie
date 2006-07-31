@@ -27,3 +27,5 @@
 
 # prereq tests may fail due to optionals
 99_prereq\.t$
+
+\bBuild.PL$
