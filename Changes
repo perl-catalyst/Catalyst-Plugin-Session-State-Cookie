@@ -1,5 +1,8 @@
 Revision history for Perl extension Catalyst::Plugin::Session::State::Cookie
 
+0.05    2006-08-06 20:50:00
+        - Add configuration of 'cookie_path' (Michael W Peterson)
+
 0.04
         - Depend on a higher version of C::P::Session
 

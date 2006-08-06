@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 10;
+use Test::More tests => 13;
 use Test::MockObject;
 use Test::MockObject::Extends;
 
@@ -71,3 +71,14 @@ is_deeply(
     { session => { value => $sessionid, expires => 123 } },
     "cookie was set correctly"
 );
+
+$cxt->clear;
+$req->clear;
+
+can_ok( $m, "cookie_is_rejecting" );
+
+%req_cookies = ( path => '/foo' );
+$req->set_always( path => '/' );
+ok( $cxt->cookie_is_rejecting(\%req_cookies), "cookie is rejecting" );
+$req->set_always( path => '/foo/bar' );
+ok( !$cxt->cookie_is_rejecting(\%req_cookies), "cookie is not rejecting" );

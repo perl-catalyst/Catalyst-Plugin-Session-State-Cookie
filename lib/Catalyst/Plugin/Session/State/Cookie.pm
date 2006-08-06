@@ -7,7 +7,7 @@ use warnings;
 use NEXT;
 use Catalyst::Utils ();
 
-our $VERSION = "0.04";
+our $VERSION = "0.05";
 
 sub setup_session {
     my $c = shift;
@@ -38,8 +38,21 @@ sub set_session_id {
 
 sub update_session_cookie {
     my ( $c, $updated ) = @_;
-    my $cookie_name = $c->config->{session}{cookie_name};
-    $c->response->cookies->{$cookie_name} = $updated;
+    
+    unless ( $c->cookie_is_rejecting( $updated ) ) {
+        my $cookie_name = $c->config->{session}{cookie_name};
+        $c->response->cookies->{$cookie_name} = $updated;
+    }
+}
+
+sub cookie_is_rejecting {
+    my ( $c, $cookie ) = @_;
+    
+    if ( $cookie->{path} ) {
+        return 1 if index $c->request->path, $cookie->{path};
+    }
+    
+    return 0;
 }
 
 sub make_session_cookie {
@@ -49,6 +62,7 @@ sub make_session_cookie {
     my $cookie = {
         value => $sid,
         ( $cfg->{cookie_domain} ? ( domain => $cfg->{cookie_domain} ) : () ),
+        ( $cfg->{cookie_path} ? ( path => $cfg->{cookie_path} ) : () ),
         %attrs,
     };
 
@@ -189,6 +203,10 @@ user's browser is shut down.
 =item cookie_secure
 
 If this attribute set true, the cookie will only be sent via HTTPS.
+
+=item cookie_path
+
+The path of the request url where cookie should be baked.
 
 =back
 
