@@ -78,7 +78,7 @@ $req->clear;
 can_ok( $m, "cookie_is_rejecting" );
 
 %req_cookies = ( path => '/foo' );
-$req->set_always( path => '/' );
+$req->set_always( path => '' );
 ok( $cxt->cookie_is_rejecting(\%req_cookies), "cookie is rejecting" );
-$req->set_always( path => '/foo/bar' );
+$req->set_always( path => 'foo/bar' );
 ok( !$cxt->cookie_is_rejecting(\%req_cookies), "cookie is not rejecting" );

@@ -49,7 +49,7 @@ sub cookie_is_rejecting {
     my ( $c, $cookie ) = @_;
     
     if ( $cookie->{path} ) {
-        return 1 if index $c->request->path, $cookie->{path};
+        return 1 if index '/'.$c->request->path, $cookie->{path};
     }
     
     return 0;
