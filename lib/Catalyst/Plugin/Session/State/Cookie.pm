@@ -7,7 +7,7 @@ use warnings;
 use NEXT;
 use Catalyst::Utils ();
 
-our $VERSION = "0.05";
+our $VERSION = "0.06";
 
 sub setup_session {
     my $c = shift;

@@ -1,5 +1,8 @@
 Revision history for Perl extension Catalyst::Plugin::Session::State::Cookie
 
+0.06    2006-09-20 19:53:00
+        - Fix args in calls to NEXT::set_session_id and NEXT::extend_session_id
+
 0.05    2006-08-06 20:50:00
         - Add configuration of 'cookie_path' (Michael W Peterson)
 
