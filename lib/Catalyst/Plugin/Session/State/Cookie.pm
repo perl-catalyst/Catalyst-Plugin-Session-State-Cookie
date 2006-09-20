@@ -25,7 +25,7 @@ sub extend_session_id {
         $c->update_session_cookie( $c->make_session_cookie( $sid ) );
     }
 
-    $c->NEXT::extend_session_id( @_ );
+    $c->NEXT::extend_session_id( $sid, $expires );
 }
 
 sub set_session_id {
@@ -33,7 +33,7 @@ sub set_session_id {
 
     $c->update_session_cookie( $c->make_session_cookie( $sid ) );
 
-    return $c->NEXT::set_session_id(@_);
+    return $c->NEXT::set_session_id($sid);
 }
 
 sub update_session_cookie {
