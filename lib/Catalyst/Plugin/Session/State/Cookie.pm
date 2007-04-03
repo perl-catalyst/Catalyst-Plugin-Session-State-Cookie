@@ -1,5 +1,5 @@
 package Catalyst::Plugin::Session::State::Cookie;
-use base qw/Catalyst::Plugin::Session::State/;
+use base qw/Catalyst::Plugin::Session::State Class::Accessor::Fast/;
 
 use strict;
 use warnings;
@@ -7,7 +7,9 @@ use warnings;
 use NEXT;
 use Catalyst::Utils ();
 
-our $VERSION = "0.06";
+our $VERSION = "0.07";
+
+BEGIN { __PACKAGE__->mk_accessors(qw/_deleted_session_id/) }
 
 sub setup_session {
     my $c = shift;
@@ -111,7 +113,7 @@ sub get_session_cookie {
 sub get_session_id {
     my $c = shift;
 
-    if ( my $cookie = $c->get_session_cookie  ) { 
+    if ( !$c->_deleted_session_id and my $cookie = $c->get_session_cookie ) { 
         my $sid = $cookie->value;
         $c->log->debug(qq/Found sessionid "$sid" in cookie/) if $c->debug;
         return $sid if $sid;
@@ -122,6 +124,8 @@ sub get_session_id {
 
 sub delete_session_id {
     my ( $c, $sid ) = @_;
+    
+    $c->_deleted_session_id(1); # to prevent get_session_id from returning it
 
     $c->update_session_cookie( $c->make_session_cookie( $sid, expires => 0 ) );
 
