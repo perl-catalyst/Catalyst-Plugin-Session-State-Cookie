@@ -34,6 +34,14 @@ BEGIN {
         $c->res->write($count);
     }
 
+    sub deleteme : Local {
+        my ( $self, $c ) = @_;
+        my $id = $c->get_session_id;
+        $c->delete_session;
+        my $id2 = $c->get_session_id;
+        $c->res->body( $id ne ( $id2 || '' ) );
+    }
+
     __PACKAGE__->setup;
 }
 
@@ -62,3 +70,6 @@ my $updated_expired;
 $m->cookie_jar->scan( sub { $updated_expired = $_[8] } );
 
 cmp_ok( $expired, "<", $updated_expired, "cookie expiration was extended" );
+
+$m->get_ok( "http://foo.com/deleteme", "get page" );
+$m->content_is( 1, 'session id changed' );
