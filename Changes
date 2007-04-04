@@ -1,5 +1,9 @@
 Revision history for Perl extension Catalyst::Plugin::Session::State::Cookie
 
+0.07    2007-04-04 23:10:00
+        - Fix the bug that caused sessions to expire immediately when another
+          session was deleted previously in the same request cycle
+
 0.06    2006-09-20 19:53:00
         - Fix args in calls to NEXT::set_session_id and NEXT::extend_session_id
 
