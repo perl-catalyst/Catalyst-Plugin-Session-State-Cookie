@@ -7,7 +7,7 @@ use warnings;
 use NEXT;
 use Catalyst::Utils ();
 
-our $VERSION = "0.07";
+our $VERSION = "0.08";
 
 BEGIN { __PACKAGE__->mk_accessors(qw/_deleted_session_id/) }
 
@@ -242,6 +242,7 @@ Andy Grundman
 Christian Hansen
 Yuval Kogman, C<nothingmuch@woobling.org>
 Marcus Ramberg
+Jonathan Rockway, C<jrockway@cpan.org>
 Sebastian Riedel
 
 =head1 COPYRIGHT

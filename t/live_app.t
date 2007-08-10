@@ -49,27 +49,27 @@ use Test::WWW::Mechanize::Catalyst qw/CookieTestApp/;
 
 my $m = Test::WWW::Mechanize::Catalyst->new;
 
-$m->get_ok( "http://foo.com/stream", "get page" );
+$m->get_ok( "http://localhost/stream", "get page" );
 $m->content_contains( "hit number 1", "session data created" );
 
 my $expired;
-$m->cookie_jar->scan( sub { $expired = $_[8] } );
+$m->cookie_jar->scan( sub { $expired = $_[8]; warn join":",@_; } );
 
-$m->get_ok( "http://foo.com/page", "get page" );
+$m->get_ok( "http://localhost/page", "get page" );
 $m->content_contains( "hit number 2", "session data restored" );
 
-$m->get_ok( "http://foo.com/stream", "get stream" );
+$m->get_ok( "http://localhost/stream", "get stream" );
 $m->content_contains( "hit number 3", "session data restored" );
 
-sleep 2;
+sleep 1;
 
-$m->get_ok( "http://foo.com/page", "get stream" );
+$m->get_ok( "http://localhost/page", "get stream" );
 $m->content_contains( "hit number 4", "session data restored" );
 
 my $updated_expired;
-$m->cookie_jar->scan( sub { $updated_expired = $_[8] } );
+$m->cookie_jar->scan( sub { $updated_expired = $_[8]; warn join":",@_; } );
 
 cmp_ok( $expired, "<", $updated_expired, "cookie expiration was extended" );
 
-$m->get_ok( "http://foo.com/deleteme", "get page" );
+$m->get_ok( "http://localhost/deleteme", "get page" );
 $m->content_is( 1, 'session id changed' );
