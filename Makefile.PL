@@ -1,4 +1,4 @@
-use inc::Module::Install;
+use inc::Module::Install 0.67;
 
 name 'Catalyst-Plugin-Session-State-Cookie';
 all_from 'lib/Catalyst/Plugin/Session/State/Cookie.pm';

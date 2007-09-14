@@ -10,6 +10,7 @@ BEGIN {
     plan skip_all =>
       "This test requires Test::WWW::Mechanize::Catalyst in order to run"
       if $@;
+    plan skip_all => 'Test::WWW::Mechanize::Catalyst >= 0.40 required' if $Test::WWW::Mechanize::Catalyst::VERSION < 0.40;
     plan 'no_plan';
 }
 
@@ -53,7 +54,7 @@ $m->get_ok( "http://localhost/stream", "get page" );
 $m->content_contains( "hit number 1", "session data created" );
 
 my $expired;
-$m->cookie_jar->scan( sub { $expired = $_[8]; warn join":",@_; } );
+$m->cookie_jar->scan( sub { $expired = $_[8]; } );
 
 $m->get_ok( "http://localhost/page", "get page" );
 $m->content_contains( "hit number 2", "session data restored" );
@@ -67,7 +68,7 @@ $m->get_ok( "http://localhost/page", "get stream" );
 $m->content_contains( "hit number 4", "session data restored" );
 
 my $updated_expired;
-$m->cookie_jar->scan( sub { $updated_expired = $_[8]; warn join":",@_; } );
+$m->cookie_jar->scan( sub { $updated_expired = $_[8]; } );
 
 cmp_ok( $expired, "<", $updated_expired, "cookie expiration was extended" );
 
