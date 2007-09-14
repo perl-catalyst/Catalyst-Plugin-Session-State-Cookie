@@ -15,6 +15,7 @@
 # Avoid Module::Build generated and utility files.
 \bBuild$
 \b_build
+\bBuild.PL$
 
 # Avoid temp and backup files.
 ~$
@@ -24,8 +25,10 @@
 \#$
 \b\.#
 ^..*\.sw[po]$
+\.DS_Store$
 
 # prereq tests may fail due to optionals
 99_prereq\.t$
 
-\bBuild.PL$
+# No tarballs!
+\.gz$
