@@ -250,15 +250,18 @@ L<Catalyst>, L<Catalyst::Plugin::Session>.
 
 =head1 AUTHORS
 
+Yuval Kogman E<lt>nothingmuch@woobling.orgE<gt>
+
+=head1 CONTRIBUTORS
+
 This module is derived from L<Catalyst::Plugin::Session::FastMmap> code, and
 has been heavily modified since.
 
 Andrew Ford
 Andy Grundman
 Christian Hansen
-Yuval Kogman, C<nothingmuch@woobling.org>
 Marcus Ramberg
-Jonathan Rockway, C<jrockway@cpan.org>
+Jonathan Rockway E<lt>jrockway@cpan.orgE<gt>
 Sebastian Riedel
 
 =head1 COPYRIGHT

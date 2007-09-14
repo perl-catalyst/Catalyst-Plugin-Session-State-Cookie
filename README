@@ -79,12 +79,14 @@ SEE ALSO
     Catalyst, Catalyst::Plugin::Session.
 
 AUTHORS
+    Yuval Kogman <nothingmuch@woobling.org>
+
+CONTRIBUTORS
     This module is derived from Catalyst::Plugin::Session::FastMmap code,
     and has been heavily modified since.
 
-    Andrew Ford Andy Grundman Christian Hansen Yuval Kogman,
-    "nothingmuch@woobling.org" Marcus Ramberg Jonathan Rockway,
-    "jrockway@cpan.org" Sebastian Riedel
+    Andrew Ford Andy Grundman Christian Hansen Marcus Ramberg Jonathan
+    Rockway <jrockway@cpan.org> Sebastian Riedel
 
 COPYRIGHT
     This program is free software, you can redistribute it and/or modify it
