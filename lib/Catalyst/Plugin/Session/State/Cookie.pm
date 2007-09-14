@@ -165,6 +165,22 @@ Returns a hash reference with the default values for new cookies.
 
 Sets the cookie based on C<cookie_name> in the response object.
 
+=item calc_expiry
+
+=item calculate_session_cookie_expires
+
+=item cookie_is_rejecting
+
+=item delete_session_id
+
+=item extend_session_id
+
+=item get_session_cookie
+
+=item get_session_id
+
+=item set_session_id
+
 =back
 
 =head1 EXTENDED METHODS
