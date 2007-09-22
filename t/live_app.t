@@ -64,13 +64,24 @@ $m->content_contains( "hit number 3", "session data restored" );
 
 sleep 1;
 
-$m->get_ok( "http://localhost/page", "get stream" );
+$m->get_ok( "http://localhost/stream", "get page" );
 $m->content_contains( "hit number 4", "session data restored" );
 
 my $updated_expired;
 $m->cookie_jar->scan( sub { $updated_expired = $_[8]; } );
-
 cmp_ok( $expired, "<", $updated_expired, "cookie expiration was extended" );
+
+$expired = $m->cookie_jar->scan( sub { $expired = $_[8] } );
+$m->get_ok( "http://localhost/page", "get page again");
+$m->content_contains( "hit number 5", "session data restored (blah)" );
+
+sleep 1;
+
+$m->get_ok( "http://localhost/stream", "get stream" );
+$m->content_contains( "hit number 6", "session data restored" );
+
+$m->cookie_jar->scan( sub { $updated_expired = $_[8]; } );
+cmp_ok( $expired, "<", $updated_expired, "streaming also extends cookie" );
 
 $m->get_ok( "http://localhost/deleteme", "get page" );
 $m->content_is( 1, 'session id changed' );
