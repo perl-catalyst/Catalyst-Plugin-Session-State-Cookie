@@ -7,7 +7,7 @@ use warnings;
 use NEXT;
 use Catalyst::Utils ();
 
-our $VERSION = "0.08";
+our $VERSION = "0.09";
 
 BEGIN { __PACKAGE__->mk_accessors(qw/_deleted_session_id/) }
 
