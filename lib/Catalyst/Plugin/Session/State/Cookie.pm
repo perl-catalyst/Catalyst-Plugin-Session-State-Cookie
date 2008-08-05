@@ -193,12 +193,12 @@ Will restore if an appropriate cookie is found.
 
 =item finalize_cookies
 
-Will set a cookie called C<session> if it doesn't exist or if it's value is not
+Will set a cookie called C<session> if it doesn't exist or if its value is not
 the current session id.
 
 =item setup_session
 
-Will set the C<cookie_name> parameter to it's default value if it isn't set.
+Will set the C<cookie_name> parameter to its default value if it isn't set.
 
 =back
 
