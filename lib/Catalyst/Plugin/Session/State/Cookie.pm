@@ -7,7 +7,7 @@ use warnings;
 use NEXT;
 use Catalyst::Utils ();
 
-our $VERSION = "0.09";
+our $VERSION = "0.10";
 
 BEGIN { __PACKAGE__->mk_accessors(qw/_deleted_session_id/) }
 
@@ -230,6 +230,12 @@ The path of the request url where cookie should be baked.
 
 =back
 
+For example, you could stick this in MyApp.pm:
+
+  __PACKAGE__->config( session => {
+     cookie_domain  => '.mydomain.com',
+  });
+
 =head1 CAVEATS
 
 Sessions have to be created before the first write to be saved. For example:
@@ -257,12 +263,12 @@ Yuval Kogman E<lt>nothingmuch@woobling.orgE<gt>
 This module is derived from L<Catalyst::Plugin::Session::FastMmap> code, and
 has been heavily modified since.
 
-Andrew Ford
-Andy Grundman
-Christian Hansen
-Marcus Ramberg
-Jonathan Rockway E<lt>jrockway@cpan.orgE<gt>
-Sebastian Riedel
+  Andrew Ford
+  Andy Grundman
+  Christian Hansen
+  Marcus Ramberg
+  Jonathan Rockway E<lt>jrockway@cpan.orgE<gt>
+  Sebastian Riedel
 
 =head1 COPYRIGHT
 
