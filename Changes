@@ -1,10 +1,13 @@
 Revision history for Perl extension Catalyst::Plugin::Session::State::Cookie
 
-
-0.10    2008-12-02
+0.10    2009-02-08
         - POD addition.
+        - Switch from NEXT to MRO::Compat
 
-0.09    ??? Somebody forgot to Changes this release.
+0.09    2007-10-08
+        - Bump dependencies so that streaming a file also causes the cookie to 
+          be updated.
+          - Add tests for this
 
 0.08    2007-09-14
         - Fix live test with Mech version 0.37+
