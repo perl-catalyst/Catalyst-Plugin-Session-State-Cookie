@@ -32,3 +32,6 @@
 
 # No tarballs!
 \.gz$
+
+\.shipit$
+

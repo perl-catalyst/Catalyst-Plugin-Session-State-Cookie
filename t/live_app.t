@@ -3,6 +3,9 @@
 use strict;
 use warnings;
 
+use FindBin qw/$Bin/;
+use lib "$Bin/lib";
+
 use Test::More;
 
 BEGIN {
@@ -12,38 +15,6 @@ BEGIN {
       if $@;
     plan skip_all => 'Test::WWW::Mechanize::Catalyst >= 0.40 required' if $Test::WWW::Mechanize::Catalyst::VERSION < 0.40;
     plan 'no_plan';
-}
-
-{
-
-    package CookieTestApp;
-    use Catalyst qw/
-      Session
-      Session::Store::Dummy
-      Session::State::Cookie
-      /;
-
-    sub page : Local {
-        my ( $self, $c ) = @_;
-        $c->res->body( "Hi! hit number " . ++$c->session->{counter} );
-    }
-
-    sub stream : Local {
-        my ( $self, $c ) = @_;
-        my $count = ++$c->session->{counter};
-        $c->res->write("hit number ");
-        $c->res->write($count);
-    }
-
-    sub deleteme : Local {
-        my ( $self, $c ) = @_;
-        my $id = $c->get_session_id;
-        $c->delete_session;
-        my $id2 = $c->get_session_id;
-        $c->res->body( $id ne ( $id2 || '' ) );
-    }
-
-    __PACKAGE__->setup;
 }
 
 use Test::WWW::Mechanize::Catalyst qw/CookieTestApp/;

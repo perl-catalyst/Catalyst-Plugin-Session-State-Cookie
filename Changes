@@ -1,5 +1,9 @@
 Revision history for Perl extension Catalyst::Plugin::Session::State::Cookie
 
+0.11    2009-05-13
+        - Change TestApp so that the application is in t/lib, to make it easier
+          for Catalyst to force our package to be immutable.
+
 0.10    2009-02-08
         - POD addition.
         - Switch from NEXT to MRO::Compat

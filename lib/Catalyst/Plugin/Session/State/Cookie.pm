@@ -7,7 +7,7 @@ use warnings;
 use MRO::Compat;
 use Catalyst::Utils ();
 
-our $VERSION = "0.10";
+our $VERSION = "0.11";
 
 BEGIN { __PACKAGE__->mk_accessors(qw/_deleted_session_id/) }
 
