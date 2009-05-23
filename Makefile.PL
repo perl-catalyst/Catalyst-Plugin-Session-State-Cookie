@@ -9,4 +9,6 @@ requires 'Test::MockObject'          => '1.01';
 requires 'MRO::Compat';
 
 auto_install;
+resources repository => 'http://dev.catalyst.perl.org/repos/Catalyst/trunk/Catalyst-Plugin-Session-State-Cookie/';
+
 WriteAll;
