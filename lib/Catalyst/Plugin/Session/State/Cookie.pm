@@ -72,7 +72,13 @@ sub make_session_cookie {
         $cookie->{expires} = $c->calculate_session_cookie_expires();
     }
 
-    $cookie->{secure} = 1 if $cfg->{cookie_secure};
+    #beware: we have to accept also the old syntax "cookie_secure = true"
+    my $sec = $cfg->{cookie_secure} || 0; # default = 0 (not set)
+    $cookie->{secure} = 1 unless ( ($sec==0) || ($sec==2) );
+    $cookie->{secure} = 1 if ( ($sec==2) && $c->req->secure );      
+    
+    my $hto = $cookie->{httponly} || 1; # default = 1 (set httponly)
+    $cookie->{httponly} = 1 unless ($hto==0);
 
     return $cookie;
 }
@@ -222,7 +228,34 @@ user's browser is shut down.
 
 =item cookie_secure
 
-If this attribute set true, the cookie will only be sent via HTTPS.
+If this attribute B<set to 0> the cookie will not have the secure flag.
+
+If this attribute B<set to 1> (or true for backward compatibility) - the cookie 
+send by the server to the client will got the secure flag that tells the browser 
+to send this cookies back to the server only via HTTPS.
+
+If this attribute B<set to 2> then the cookie will got the secure flag only if
+the request that caused cookie generation was sent over https (this option is 
+not good if you are mixing https and http in you application).
+
+Default vaule is 0.
+
+=item cookie_httponly
+
+If this attribute B<set to 0>, the cookie will not have HTTPOnly flag.
+
+If this attribute B<set to 1>, the cookie will got HTTPOnly flag that should 
+prevent client side Javascript accessing the cookie value - this makes some
+sort of session hijacking attacks significantly harder. Unfortunately not all
+browsers support this flag (MSIE 6 SP1+, Firefox 3.0.0.6+, Opera 9.5+); if 
+a browser is not aware of HTTPOnly the flag will be ignored.
+
+Default value is 1.
+
+Note1: Many peole are confused by the name "HTTPOnly" - it B<does not mean>
+that this cookie works only over HTTP and not over HTTPS. 
+
+Note2: This paramater requires Catalyst::Runtime 5.80005 otherwise is skipped.
 
 =item cookie_path
 
