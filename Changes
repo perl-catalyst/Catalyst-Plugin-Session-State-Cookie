@@ -1,5 +1,8 @@
 Revision history for Perl extension Catalyst::Plugin::Session::State::Cookie
 
+        - Introduced a new option cookie_httponly 
+        - Option cookie_secure extended (old syntax fully supported)
+
 0.11    2009-05-13
         - Change TestApp so that the application is in t/lib, to make it easier
           for Catalyst to force our package to be immutable.
