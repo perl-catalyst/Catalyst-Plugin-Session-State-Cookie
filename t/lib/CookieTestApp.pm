@@ -6,6 +6,8 @@ use Catalyst qw/
   Session::State::Cookie
   /;
 
+__PACKAGE__->config->{session} = { cookie_secure => 2 };
+
 sub page : Local {
     my ( $self, $c ) = @_;
     $c->res->body( "Hi! hit number " . ++$c->session->{counter} );

@@ -68,7 +68,7 @@ $cxt->set_session_id($sessionid);
 $res->called_ok( "cookies", "response cookie was set when sessionid changed" );
 is_deeply(
     \%res_cookies,
-    { session => { value => $sessionid, expires => 123 } },
+    { session => { value => $sessionid, httponly => 1, expires => 123 } },
     "cookie was set correctly"
 );
 

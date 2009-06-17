@@ -56,3 +56,10 @@ cmp_ok( $expired, "<", $updated_expired, "streaming also extends cookie" );
 
 $m->get_ok( "http://localhost/deleteme", "get page" );
 $m->content_is( 1, 'session id changed' );
+
+$m->get_ok( "https://localhost/page", "get page over HTTPS - init session");
+$m->content_contains( "hit number 1", "first hit" );
+$m->get_ok( "http://localhost/page", "get page again over HTTP");
+$m->content_contains( "hit number 1", "first hit again - cookie not sent" );
+$m->get_ok( "https://localhost/page", "get page over HTTPS");
+$m->content_contains( "hit number 2", "second hit" );
