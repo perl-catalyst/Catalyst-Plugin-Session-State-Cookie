@@ -1,15 +1,15 @@
 package Catalyst::Plugin::Session::State::Cookie;
-use base qw/Catalyst::Plugin::Session::State Class::Accessor::Fast/;
+use Moose;
+use namespace::autoclean;
 
-use strict;
-use warnings;
+extends 'Catalyst::Plugin::Session::State';
 
 use MRO::Compat;
 use Catalyst::Utils ();
 
-our $VERSION = "0.12";
+our $VERSION = "0.13";
 
-BEGIN { __PACKAGE__->mk_accessors(qw/_deleted_session_id/) }
+has _deleted_session_id => ( is => 'rw' );
 
 sub setup_session {
     my $c = shift;

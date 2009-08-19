@@ -1,5 +1,14 @@
 Revision history for Perl extension Catalyst::Plugin::Session::State::Cookie
 
+0.13    2009-08-19
+        - Remove Test::MockObject from the test suite as prone to failing on
+          some platforms and perl versions due to its UNIVERSAL:: package
+          dependencies.
+        - Remove Class::Accessor::Fast and replace with Moose. This allows
+          us to not have a ->new method, This is more correct for Plugins
+          and also means that Catalyst is not forced to invoke the scary
+          replace_constructor at scope end handling.
+
 0.12    2009-07-18
         - Introduced a new option cookie_httponly 
         - Option cookie_secure extended (old syntax fully supported)
