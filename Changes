@@ -1,5 +1,6 @@
 Revision history for Perl extension Catalyst::Plugin::Session::State::Cookie
 
+0.14    2009-08-22
         - Allow turning off the httponly option (Closes RT#48930).
 
 0.13    2009-08-19

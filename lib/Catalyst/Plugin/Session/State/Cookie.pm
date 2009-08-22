@@ -7,7 +7,7 @@ extends 'Catalyst::Plugin::Session::State';
 use MRO::Compat;
 use Catalyst::Utils ();
 
-our $VERSION = "0.13";
+our $VERSION = "0.14";
 
 has _deleted_session_id => ( is => 'rw' );
 
