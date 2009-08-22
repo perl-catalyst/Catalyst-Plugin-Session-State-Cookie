@@ -77,8 +77,8 @@ sub make_session_cookie {
     $cookie->{secure} = 1 unless ( ($sec==0) || ($sec==2) );
     $cookie->{secure} = 1 if ( ($sec==2) && $c->req->secure );
 
-    my $hto = $cookie->{httponly} || 1; # default = 1 (set httponly)
-    $cookie->{httponly} = 1 unless ($hto==0);
+    $cookie->{httponly} = 1
+        unless exists $cookie->{httponly}; # default = 1 (set httponly)
 
     return $cookie;
 }

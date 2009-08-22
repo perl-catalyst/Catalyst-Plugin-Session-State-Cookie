@@ -1,5 +1,7 @@
 Revision history for Perl extension Catalyst::Plugin::Session::State::Cookie
 
+        - Allow turning off the httponly option (Closes RT#48930).
+
 0.13    2009-08-19
         - Remove Test::MockObject from the test suite as prone to failing on
           some platforms and perl versions due to its UNIVERSAL:: package
@@ -10,7 +12,7 @@ Revision history for Perl extension Catalyst::Plugin::Session::State::Cookie
           replace_constructor at scope end handling.
 
 0.12    2009-07-18
-        - Introduced a new option cookie_httponly 
+        - Introduced a new option cookie_httponly
         - Option cookie_secure extended (old syntax fully supported)
 
 0.11    2009-05-13
@@ -22,7 +24,7 @@ Revision history for Perl extension Catalyst::Plugin::Session::State::Cookie
         - Switch from NEXT to MRO::Compat
 
 0.09    2007-10-08
-        - Bump dependencies so that streaming a file also causes the cookie to 
+        - Bump dependencies so that streaming a file also causes the cookie to
           be updated.
           - Add tests for this
 
@@ -43,7 +45,7 @@ Revision history for Perl extension Catalyst::Plugin::Session::State::Cookie
 0.04
         - Depend on a higher version of C::P::Session
 
-0.03 
+0.03
         - refactored make_session_cookie to separate calc_expiry, and made
 	      that easily overloadable.
         - updated for the new state API (get_session_id, set_session_id, etc)
