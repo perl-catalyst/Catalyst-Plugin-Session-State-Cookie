@@ -7,16 +7,24 @@ extends 'Catalyst::Plugin::Session::State';
 use MRO::Compat;
 use Catalyst::Utils ();
 
-our $VERSION = "0.14";
+our $VERSION = "0.15";
 
 has _deleted_session_id => ( is => 'rw' );
+
+# FIXME - Can go away when we dep on new Session..
+sub _session_plugin_config {
+    my $c = shift;
+    my $key = $c->config->{'Plugin::Session'} ?
+        'Plugin::Session' : 'session';
+    $c->config->{$key} ||= {};
+}
 
 sub setup_session {
     my $c = shift;
 
     $c->maybe::next::method(@_);
 
-    $c->config->{session}{cookie_name}
+    $c->_session_plugin_config->{cookie_name}
         ||= Catalyst::Utils::appprefix($c) . '_session';
 }
 
@@ -42,7 +50,7 @@ sub update_session_cookie {
     my ( $c, $updated ) = @_;
 
     unless ( $c->cookie_is_rejecting( $updated ) ) {
-        my $cookie_name = $c->config->{session}{cookie_name};
+        my $cookie_name = $c->_session_plugin_config->{cookie_name};
         $c->response->cookies->{$cookie_name} = $updated;
     }
 }
@@ -60,7 +68,7 @@ sub cookie_is_rejecting {
 sub make_session_cookie {
     my ( $c, $sid, %attrs ) = @_;
 
-    my $cfg    = $c->config->{session};
+    my $cfg    = $c->_session_plugin_config;
     my $cookie = {
         value => $sid,
         ( $cfg->{cookie_domain} ? ( domain => $cfg->{cookie_domain} ) : () ),
@@ -77,8 +85,9 @@ sub make_session_cookie {
     $cookie->{secure} = 1 unless ( ($sec==0) || ($sec==2) );
     $cookie->{secure} = 1 if ( ($sec==2) && $c->req->secure );
 
+    $cookie->{httponly} = $cfg->{cookie_httponly};
     $cookie->{httponly} = 1
-        unless exists $cookie->{httponly}; # default = 1 (set httponly)
+        unless defined $cookie->{httponly}; # default = 1 (set httponly)
 
     return $cookie;
 }
@@ -90,7 +99,7 @@ sub calc_expiry { # compat
 
 sub calculate_session_cookie_expires {
     my $c   = shift;
-    my $cfg = $c->config->{session};
+    my $cfg = $c->_session_plugin_config;
 
     my $value = $c->maybe::next::method(@_);
     return $value if $value;
@@ -111,7 +120,7 @@ sub calculate_session_cookie_expires {
 sub get_session_cookie {
     my $c = shift;
 
-    my $cookie_name = $c->config->{session}{cookie_name};
+    my $cookie_name = $c->_session_plugin_config->{cookie_name};
 
     return $c->request->cookies->{$cookie_name};
 }
@@ -265,7 +274,7 @@ The path of the request url where cookie should be baked.
 
 For example, you could stick this in MyApp.pm:
 
-  __PACKAGE__->config( session => {
+  __PACKAGE__->config( 'Plugin::Session' => {
      cookie_domain  => '.mydomain.com',
   });
 

@@ -1,5 +1,12 @@
 Revision history for Perl extension Catalyst::Plugin::Session::State::Cookie
 
+0.15    2009-10-06
+        - Fix the httponly option again (Closes RT##50249).
+        - Make tests not warn with latest version of Catalyst.
+        - Prefer session configuration to be in the 'Plugin::Session'
+          config key, but provide backwards compatibility for the
+          deprecated 'session' key.
+
 0.14    2009-08-22
         - Allow turning off the httponly option (Closes RT#48930).
 
