@@ -7,7 +7,7 @@ extends 'Catalyst::Plugin::Session::State';
 use MRO::Compat;
 use Catalyst::Utils ();
 
-our $VERSION = "0.15";
+our $VERSION = "0.16";
 
 has _deleted_session_id => ( is => 'rw' );
 
@@ -303,6 +303,7 @@ has been heavily modified since.
   Marcus Ramberg
   Jonathan Rockway E<lt>jrockway@cpan.orgE<gt>
   Sebastian Riedel
+  Florian Ragwitz
 
 =head1 COPYRIGHT
 
