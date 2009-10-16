@@ -11,14 +11,6 @@ our $VERSION = "0.15";
 
 has _deleted_session_id => ( is => 'rw' );
 
-# FIXME - Can go away when we dep on new Session..
-sub _session_plugin_config {
-    my $c = shift;
-    my $key = $c->config->{'Plugin::Session'} ?
-        'Plugin::Session' : 'session';
-    $c->config->{$key} ||= {};
-}
-
 sub setup_session {
     my $c = shift;
 

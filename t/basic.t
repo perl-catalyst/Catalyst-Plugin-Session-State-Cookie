@@ -5,6 +5,8 @@ use warnings;
 
 use Test::More tests => 13;
 
+use Catalyst::Plugin::Session;
+
 my $m;
 BEGIN { use_ok( $m = "Catalyst::Plugin::Session::State::Cookie" ) }
 
@@ -23,7 +25,13 @@ my $cookies_called = 0;
 $res_meta->add_method( cookies => sub { $cookies_called++; \%res_cookies });
 my $res = $res_meta->name->new;
 
-my $cxt_meta = Class::MOP::Class->create_anon_class( superclasses => ["Catalyst::Plugin::Session::State::Cookie", 'Moose::Object'] );
+my $cxt_meta = Class::MOP::Class->create_anon_class(
+    superclasses => [qw/
+        Catalyst::Plugin::Session
+        Catalyst::Plugin::Session::State::Cookie
+        Moose::Object
+    /],
+);
 
 my $config = {};
 $cxt_meta->add_method( config   => sub { $config });
@@ -40,10 +48,10 @@ can_ok( $m, "setup_session" );
 my $cxt = $cxt_meta->name->new;
 $cxt->setup_session;
 
-like( $config->{session}{cookie_name},
+like( $config->{'Plugin::Session'}{cookie_name},
     qr/_session$/, "default cookie name is set" );
 
-$config->{session}{cookie_name} = "session";
+$config->{'Plugin::Session'}{cookie_name} = "session";
 
 can_ok( $m, "get_session_id" );
 
