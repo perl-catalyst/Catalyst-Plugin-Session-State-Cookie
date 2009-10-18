@@ -1,5 +1,8 @@
 Revision history for Perl extension Catalyst::Plugin::Session::State::Cookie
 
+0.17    2009-10-18
+        - Fixup copyright information
+
 0.16    2009-10-16
         - Use session config handling from Catalyst::Plugin::Session 0.27.
 

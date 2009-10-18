@@ -7,7 +7,7 @@ extends 'Catalyst::Plugin::Session::State';
 use MRO::Compat;
 use Catalyst::Utils ();
 
-our $VERSION = "0.16";
+our $VERSION = "0.17";
 
 has _deleted_session_id => ( is => 'rw' );
 
@@ -307,7 +307,9 @@ has been heavily modified since.
 
 =head1 COPYRIGHT
 
-Copyright (c) 2005, Yuval Kogman C<< <nothingmuch@woobling.org> >>
+Copyright (c) 2005 - 2009
+the Catalyst::Plugin::Session::State::Cookie L</AUTHORS> and L</CONTRIBUTORS>
+as listed above.
 
 =head1 LICENSE
 
