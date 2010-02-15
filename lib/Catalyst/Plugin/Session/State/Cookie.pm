@@ -256,7 +256,7 @@ Default value is 1.
 Note1: Many peole are confused by the name "HTTPOnly" - it B<does not mean>
 that this cookie works only over HTTP and not over HTTPS.
 
-Note2: This paramater requires Catalyst::Runtime 5.80005 otherwise is skipped.
+Note2: This parameter requires Catalyst::Runtime 5.80005 otherwise is skipped.
 
 =item cookie_path
 
