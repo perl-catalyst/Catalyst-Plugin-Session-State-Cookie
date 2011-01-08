@@ -232,14 +232,14 @@ user's browser is shut down.
 If this attribute B<set to 0> the cookie will not have the secure flag.
 
 If this attribute B<set to 1> (or true for backward compatibility) - the cookie
-send by the server to the client will got the secure flag that tells the browser
-to send this cookies back to the server only via HTTPS.
+sent by the server to the client will get the secure flag that tells the browser
+to send this cookie back to the server only via HTTPS.
 
-If this attribute B<set to 2> then the cookie will got the secure flag only if
+If this attribute B<set to 2> then the cookie will get the secure flag only if
 the request that caused cookie generation was sent over https (this option is
-not good if you are mixing https and http in you application).
+not good if you are mixing https and http in your application).
 
-Default vaule is 0.
+Default value is 0.
 
 =item cookie_httponly
 
