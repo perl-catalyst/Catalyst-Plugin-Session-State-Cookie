@@ -12,7 +12,7 @@ test_requires 'Moose';
 test_requires 'Test::More';
 
 auto_install;
-resources repository => 'http://dev.catalyst.perl.org/repos/Catalyst/Catalyst-Plugin-Session-State-Cookie/trunk/';
+resources repository => 'git://git.shadowcat.co.uk/catagits/Catalyst-Plugin-Session-State-Cookie.git';
 
 if ($Module::Install::AUTHOR) {
     system("pod2text lib/Catalyst/Plugin/Session/State/Cookie.pm > README")
