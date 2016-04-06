@@ -96,7 +96,15 @@ sub calculate_session_cookie_expires {
     my $value = $c->maybe::next::method(@_);
     return $value if $value;
 
-    if ( exists $cfg->{cookie_expires} ) {
+    if ( exists $c->session->{__cookie_expires} ) {
+        if ( $c->session->{__cookie_expires} > 0 ) {
+            return time() + $c->session->{__cookie_expires};
+        }
+        else {
+            return undef;
+        }
+    }
+    elsif ( exists $cfg->{cookie_expires} ) {
         if ( $cfg->{cookie_expires} > 0 ) {
             return time() + $cfg->{cookie_expires};
         }
@@ -107,6 +115,20 @@ sub calculate_session_cookie_expires {
     else {
         return $c->session_expires;
     }
+}
+
+sub set_session_cookie_expire {
+    my ( $c, $val ) = @_;
+
+    if ( defined $val ) {
+        $c->session->{__cookie_expires} = $val;
+    }
+    else {
+        delete $c->session->{__cookie_expires};
+    }
+    # Force the cookie to be regenerated
+    $c->set_session_id( $c->sessionid );
+    return 1;
 }
 
 sub get_session_cookie {
@@ -159,6 +181,21 @@ In order for L<Catalyst::Plugin::Session> to work the session ID needs to be
 stored on the client, and the session data needs to be stored on the server.
 
 This plugin stores the session ID on the client using the cookie mechanism.
+
+=head1 PUBLIC METHODS
+
+=head2 set_session_cookie_expire $ttl_in_seconds
+
+    $c->set_session_cookie_expire(3600);     # set to 1 hour
+    $c->set_session_cookie_expire(0);        # expire with browser session
+    $c->set_session_cookie_expire(undef);    # fallback to default
+
+This lets you change the expiry for the current session's cookie. You can set a
+number of seconds, 0 to expire the cookie when the browser quits or undef to
+fallback to the configured defaults. The value you choose is persisted.
+
+Note this value has no effect on the expiry in the session store - it only
+affects the cookie itself.
 
 =head1 METHODS
 
