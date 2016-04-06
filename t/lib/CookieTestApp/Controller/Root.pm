@@ -19,6 +19,13 @@ sub stream : Local {
     $c->res->write($count);
 }
 
+sub set_session_cookie_expire : Local {
+    my ( $self, $c, $val ) = @_;
+    $val = undef if $val eq 'undef';
+    $c->set_session_cookie_expire($val);
+    $c->res->body('expire_with_browser_session');
+}
+
 sub deleteme : Local {
     my ( $self, $c ) = @_;
     my $id = $c->get_session_id;

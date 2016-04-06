@@ -54,6 +54,21 @@ $m->content_contains( "hit number 6", "session data restored" );
 $m->cookie_jar->scan( sub { $updated_expired = $_[8]; } );
 cmp_ok( $expired, "<", $updated_expired, "streaming also extends cookie" );
 
+# set the cookie to expire in 5 minutes
+$m->get_ok( "/set_session_cookie_expire/300", "set expire to 300" );
+$m->cookie_jar->scan( sub { $expired = $_[8]; } );
+cmp_ok( $expired, '<=', ( time + 300 ), "cookie will expire within 5 minutes" );
+
+# set the cookie to expire at end of session
+$m->get_ok( "/set_session_cookie_expire/0", "set expire to 0" );
+$m->cookie_jar->scan( sub { $expired = $_[8]; } );
+ok( !defined $expired, "cookie will now expire with browser session" );
+
+# restore to default (3600 - so test for >= now+3500)
+$m->get_ok( "/set_session_cookie_expire/undef", "set expire to undef" );
+$m->cookie_jar->scan( sub { $expired = $_[8]; } );
+cmp_ok( $expired, '>=', ( time + 3500 ), "cookie expiry reset to default" );
+
 $m->get_ok( "http://localhost/deleteme", "get page" );
 $m->content_is( 1, 'session id changed' );
 
