@@ -27,6 +27,8 @@ my %META = (
     },
     develop   => {
       requires => {
+        'Test::Pod'           => '1.14',
+        'Test::Pod::Coverage' => '1.04',
       },
     },
   },
