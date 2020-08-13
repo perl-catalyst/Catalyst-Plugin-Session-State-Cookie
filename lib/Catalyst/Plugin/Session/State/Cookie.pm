@@ -139,11 +139,8 @@ sub delete_session_id {
     $c->maybe::next::method($sid);
 }
 
-__PACKAGE__
-
+1;
 __END__
-
-=pod
 
 =head1 NAME
 
@@ -266,20 +263,20 @@ The path of the request url where cookie should be baked.
 
 For example, you could stick this in MyApp.pm:
 
-  __PACKAGE__->config( 'Plugin::Session' => {
-     cookie_domain  => '.mydomain.com',
-  });
+    __PACKAGE__->config( 'Plugin::Session' => {
+        cookie_domain  => '.mydomain.com',
+    });
 
 =head1 CAVEATS
 
 Sessions have to be created before the first write to be saved. For example:
 
-	sub action : Local {
-		my ( $self, $c ) = @_;
-		$c->res->write("foo");
-		$c->session( ... );
-		...
-	}
+    sub action : Local {
+        my ( $self, $c ) = @_;
+        $c->res->write("foo");
+        $c->session( ... );
+        ...
+    }
 
 Will cause a session ID to not be set, because by the time a session is
 actually created the headers have already been sent to the client.
@@ -290,20 +287,26 @@ L<Catalyst>, L<Catalyst::Plugin::Session>.
 
 =head1 AUTHORS
 
-Yuval Kogman E<lt>nothingmuch@woobling.orgE<gt>
+Yuval Kogman <nothingmuch@woobling.org>
 
 =head1 CONTRIBUTORS
 
 This module is derived from L<Catalyst::Plugin::Session::FastMmap> code, and
 has been heavily modified since.
 
-  Andrew Ford
-  Andy Grundman
-  Christian Hansen
-  Marcus Ramberg
-  Jonathan Rockway E<lt>jrockway@cpan.orgE<gt>
-  Sebastian Riedel
-  Florian Ragwitz
+Andrew Ford
+
+Andy Grundman
+
+Christian Hansen
+
+Marcus Ramberg
+
+Jonathan Rockway <jrockway@cpan.org>
+
+Sebastian Riedel
+
+Florian Ragwitz
 
 =head1 COPYRIGHT
 
@@ -317,5 +320,3 @@ This program is free software, you can redistribute it and/or modify it
 under the same terms as Perl itself.
 
 =cut
-
-1;
