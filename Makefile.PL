@@ -13,7 +13,9 @@ my %META = (
     } },
     test => {
       requires => {
-        'Test::More'  => '0.88',
+        'Catalyst::Test'  => 0,
+        'HTTP::Cookies'   => 0,
+        'Test::More'      => '0.88',
       },
     },
     runtime => {
