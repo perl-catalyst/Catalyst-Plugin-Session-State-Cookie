@@ -81,6 +81,10 @@ sub make_session_cookie {
     $cookie->{httponly} = 1
         unless defined $cookie->{httponly}; # default = 1 (set httponly)
 
+    $cookie->{samesite} = $cfg->{cookie_samesite};
+    $cookie->{samesite} = "Lax"
+        unless defined $cookie->{ samesite}; # default = Lax
+
     return $cookie;
 }
 
@@ -254,6 +258,26 @@ Note1: Many people are confused by the name "HTTPOnly" - it B<does not mean>
 that this cookie works only over HTTP and not over HTTPS.
 
 Note2: This parameter requires Catalyst::Runtime 5.80005 otherwise is skipped.
+
+=item cookie_samesite
+
+This attribute configures the value of the
+L<SameSite|https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie/SameSite>
+flag.
+
+If set to None, the cookie will be sent when making cross origin requests,
+including following links from other origins. This requires the
+L</cookie_secure> flag to be set.
+
+If set to Lax, the cookie will not be included when embedded in or fetched from
+other origins, but will be included when following cross origin links.
+
+If set to Strict, the cookie will not be included for any cross origin requests,
+including links from different origins.
+
+Default value is C<Lax>. This is the default modern browsers use.
+
+Note: This parameter requires Catalyst::Runtime 5.90125 otherwise is skipped.
 
 =item cookie_path
 
