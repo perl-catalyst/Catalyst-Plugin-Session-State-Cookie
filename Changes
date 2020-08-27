@@ -1,5 +1,6 @@
 Revision history for Perl extension Catalyst::Plugin::Session::State::Cookie
 
+0.18 - 2020-08-27
         - add SameSite support (RT#133009)
         - convert optional test using Test::WWW::Mechanize::Catalyst to
           mandatory test using Catalyst::Test
