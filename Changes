@@ -1,5 +1,13 @@
 Revision history for Perl extension Catalyst::Plugin::Session::State::Cookie
 
+        - add SameSite support (RT#133009)
+        - convert optional test using Test::WWW::Mechanize::Catalyst to
+          mandatory test using Catalyst::Test
+        - convert from Module::Install to Distar for packaging and release
+          process
+        - fix running Makefile.PL when . is not included in @INC (RT#121882)
+        - minor test cleanups
+        - typo and spelling fixes in documentation
         - convert repository to git (fREW Schmidt)
 
 0.17    2009-10-18
