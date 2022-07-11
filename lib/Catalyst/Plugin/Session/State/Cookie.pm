@@ -84,7 +84,7 @@ sub make_session_cookie {
 
     $cookie->{samesite} = $cfg->{cookie_samesite};
     $cookie->{samesite} = "Lax"
-        unless defined $cookie->{ samesite}; # default = Lax
+        unless defined $cookie->{samesite}; # default = Lax
 
     return $cookie;
 }
