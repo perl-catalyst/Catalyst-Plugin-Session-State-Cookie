@@ -36,8 +36,8 @@ my %META = (
   },
   resources => {
     repository => {
-      url => 'git://git.shadowcat.co.uk/catagits/Catalyst-Plugin-Session-State-Cookie.git',
-      web => 'http://git.shadowcat.co.uk/gitweb/gitweb.cgi?p=catagits/Catalyst-Plugin-Session-State-Cookie.git',
+      url => 'https://github.com/perl-catalyst/Catalyst-Plugin-Session-State-Cookie.git',
+      web => 'https://github.com/perl-catalyst/Catalyst-Plugin-Session-State-Cookie',
       type => 'git',
     },
     bugtracker => {
